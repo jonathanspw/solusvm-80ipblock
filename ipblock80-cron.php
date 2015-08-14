@@ -6,7 +6,7 @@
  * @author Jonathan Wright
  * @website https://www.knownhost.com
  * @email jonathan@effecthost.com
- * @version 1.0
+ * @version 1.0.1
  *
  */
 
@@ -65,17 +65,19 @@ function get_ipblocks($db){
  */
 function block_used_percent($db,$blockid){
 	// Lets find out how many IPs are in the block.  Not everyone has full /24s.
-	$sql = "select * from `ipaddresses` where `blockid`='$blockid'";
-	$total_ips = $db->query($sql)->num_rows;
+	$sql = "select count(`ipaddressid`) as count from `ipaddresses` where `blockid`='$blockid'";
+	$result = $db->query($sql)->fetch_assoc();
+	$total_ips = $result['count'];
 	$sql = null;
 
 	if(COUNT_RESERVED_AS_USED == true) {
-		$sql = "select `ipaddressid` from `ipaddresses` where `blockid`='$blockid' and (`reserved` = 1 or `vserverid`!=0)";
+		$sql = "select count(`ipaddressid`) as `count` from `ipaddresses` where `blockid`='$blockid' and (`reserved` = 1 or `vserverid`!=0)";
 	}else{
-		$sql = "select `ipaddressid` from `ipaddresses` where `blockid`='$blockid' and `vserverid`!=0";
+		$sql = "select count(`ipaddressid`) as `count` from `ipaddresses` where `blockid`='$blockid' and `vserverid`!=0";
 	}
 
-	$used_ips = $db->query($sql)->num_rows;
+	$result = $db->query($sql)->fetch_assoc();
+	$used_ips = $result['count'];
 
 	return round(($used_ips / $total_ips)*100,1);
 
