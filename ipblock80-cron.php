@@ -84,7 +84,7 @@ function block_used_percent($db,$blockid){
 /**
  * Simply checks of the used percent is greater than the threshold so we can know how to handle the block
  * @param $used_percent
- * @return bool
+ * @return bool true if above threshold, false if below
  */
 function threshold_check($used_percent){
 	if($used_percent > PERCENT_THRESHOLD)
