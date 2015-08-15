@@ -10,3 +10,5 @@ define('HIGH_PRIORITY',100); priority to be assigned for blocks that should be u
 define('PERCENT_THRESHOLD',82); Set the percent used threshold that the script should let IP blocks go to.  After reaching this threshold their priority is reset to 0 unless they drop back below the threshold.
 
 define('COUNT_RESERVED_AS_USED',true); Should reserved IPs be counted as used
+
+define('DYNAMIC_BALANCING',true); Use dynamic block balancing to attempt to get blocks to equal usage and maintain it?
