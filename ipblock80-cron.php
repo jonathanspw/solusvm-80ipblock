@@ -19,6 +19,8 @@
 	define('PERCENT_THRESHOLD',82);
 	// Should reserved IPs be counted as used
 	define('COUNT_RESERVED_AS_USED',true);
+    // Use dynamic block balancing to attempt to get blocks to equal usage and maintain it?
+    define('DYNAMIC_BALANCING',true);
 // end config
 // do not modify below this line
 
@@ -100,16 +102,19 @@ function threshold_check($used_percent){
  * @param $blockid
  * @param $deploy_order
  */
-function set_block_priority($db,$blockid,$deploy_order){
+function set_block_priority($db,$blockid,$deploy_order,$used_percent){
+    if(DYNAMIC_BALANCING)
+        $deploy_order = 100 - $used_percent;
 	$sql = "update `ipblocks` set `deploy_order`='$deploy_order' where `blockid`='$blockid'";
 	$db->query($sql);
 }
 
 $ipblocks = get_ipblocks($db);
 foreach($ipblocks as $blockid=>$name){
-	if(threshold_check(block_used_percent($db,$blockid))){
-		set_block_priority($db,$blockid,DEFAULT_PRIORITY);
+    $used_percent = block_used_percent($db,$blockid);
+	if(threshold_check($used_percent)){
+		set_block_priority($db,$blockid,DEFAULT_PRIORITY,$used_percent);
 	}else{
-		set_block_priority($db,$blockid,HIGH_PRIORITY);
+		set_block_priority($db,$blockid,HIGH_PRIORITY,$used_percent);
 	}
 }
