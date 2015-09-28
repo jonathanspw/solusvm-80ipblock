@@ -1,6 +1,8 @@
 # solusvm-80ipblock
 Cron job designed to be run on the SolusVM master.  It will automatically adjust IP block priorities to help you run their usage up to a predefined threshold.
 
+Requires SolusVM >= 1.17
+
 Options:
 
 define('DEFAULT_PRIORITY',0); Default blank priority to be used.  This should probably be 0.  Blocks above the threshold are reset to this.
